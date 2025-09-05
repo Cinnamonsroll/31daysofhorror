@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Creepster, Nosifer } from "next/font/google"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
@@ -24,7 +24,6 @@ export const metadata: Metadata = {
   title: "31 Days of Horror - October Movie Calendar",
   description:
     "A spine-chilling movie for every October night. Discover horror films in our interactive advent calendar.",
-  generator: "v0.app",
   keywords: ["horror movies", "october", "halloween", "advent calendar", "scary films"],
   openGraph: {
     title: "31 Days of Horror",
@@ -32,6 +31,10 @@ export const metadata: Metadata = {
     type: "website",
   },
 }
+
+export const viewport: Viewport = {
+  themeColor: '#E67146', 
+};
 
 export default function RootLayout({
   children,
