@@ -1,103 +1,112 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { Suspense } from "react";
+import AtmosphericBackground from "./components/atmospheric-background";
+import { HorrorCalendar } from "./components/horror-calendar";
+import { useRouter } from "next/navigation";
+import { getCurrentYear } from "./lib/google-sheets";
+export default function HomePage() {
+  const router = useRouter();
+  const year = getCurrentYear();
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-h-screen bg-background relative">
+      <AtmosphericBackground />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-background/50 to-transparent pointer-events-none" />
+
+      <div className="container mx-auto px-4 py-8 relative z-10">
+        <header className="text-center mb-8 md:mb-16">
+          <div className="relative">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground mb-4 md:mb-6 font-creepster tracking-wider relative">
+              <span className="relative z-10">31 DAYS OF HORROR</span>
+              <div className="absolute inset-0 text-primary/20 blur-sm">
+                31 DAYS OF HORROR
+              </div>
+            </h1>
+
+            <div className="flex justify-center items-center gap-4 mb-4 md:mb-6">
+              <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-transparent to-primary"></div>
+              <svg
+                className="w-8 h-8 md:w-10 md:h-10 text-primary animate-pulse"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zM9 11c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+              </svg>
+              <div className="w-12 md:w-16 h-0.5 bg-gradient-to-l from-transparent to-primary"></div>
+            </div>
+
+            <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground font-mono tracking-wide px-4">
+              A spine-chilling movie for every October night
+            </p>
+
+            <p className="text-sm text-muted-foreground/70 mt-4 italic px-4">
+              &quot;In the darkness of October, horror comes alive...&quot;
+            </p>
+
+            <div className="mt-8">
+              <button
+                onClick={() => router.push(`${+year - 1}`)}
+                className="group relative px-6 py-3 bg-gradient-to-r from-red-900/20 to-red-800/20 border border-red-800/30 rounded-lg text-red-400 font-mono text-sm hover:from-red-800/30 hover:to-red-700/30 transition-all duration-300 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                <span className="relative z-10 flex items-center gap-2">
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                  </svg>
+                  View Previous Years
+                </span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <Suspense
+          fallback={
+            <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4 px-4">
+              <div className="relative">
+                <svg
+                  className="w-12 h-12 md:w-16 md:h-16 text-primary animate-bounce"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 2C8.69 2 6 4.69 6 8v8l2-2 2 2 2-2 2 2 2-2 2 2V8c0-3.31-2.69-6-6-6zm-2 8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                </svg>
+                <svg
+                  className="absolute inset-0 w-12 h-12 md:w-16 md:h-16 text-primary animate-pulse opacity-50"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 2C8.69 2 6 4.69 6 8v8l2-2 2 2 2-2 2 2 2-2 2 2V8c0-3.31-2.69-6-6-6zm-2 8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                </svg>
+              </div>
+              <div className="text-xl md:text-2xl text-muted-foreground animate-pulse font-mono text-center">
+                Summoning the horror collection...
+              </div>
+              <div className="flex space-x-1">
+                <div
+                  className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                ></div>
+              </div>
+            </div>
+          }
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <HorrorCalendar />
+        </Suspense>
+      </div>
+    </main>
   );
 }
