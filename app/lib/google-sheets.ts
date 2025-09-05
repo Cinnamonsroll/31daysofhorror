@@ -67,13 +67,20 @@ if (typeof window !== 'undefined') {
   sheetCache = loadCacheFromStorage();
 }
 
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 2; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 export async function getMoviesFromSheet(): Promise<MovieData> {
-  
   if (sheetCache && Date.now() - sheetCache.timestamp < CACHE_DURATION) {
     return sheetCache.data;
   }
-  
-  
+
   if (!sheetCache) {
     const storedCache = loadCacheFromStorage();
     if (storedCache) {
@@ -105,7 +112,6 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
     }
 
     const movieData: MovieData = {};
-
     const headers = parseCSVLine(lines[0]);
 
     headers.forEach((year, columnIndex) => {
@@ -113,11 +119,7 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
       if (year && !isNaN(yearNum) && yearNum >= 2020 && yearNum <= 2030) {
         movieData[year] = [];
 
-        for (
-          let rowIndex = 1;
-          rowIndex <= 31 && rowIndex < lines.length;
-          rowIndex++
-        ) {
+        for (let rowIndex = 1; rowIndex <= 31 && rowIndex < lines.length; rowIndex++) {
           const cells = parseCSVLine(lines[rowIndex]);
           const movie = cells[columnIndex]?.trim();
           if (movie && movie !== "") {
@@ -127,10 +129,15 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
           }
         }
 
+   
+        if (year === getCurrentYear()) {
+          const first30 = movieData[year].slice(0, 30);
+          const last = movieData[year][30]; // 31st movie
+          movieData[year] = [...shuffleArray(first30), last];
+        }
+
         while (movieData[year].length < 31) {
-          movieData[year].push(
-            `Day ${movieData[year].length + 1} - Horror Movie TBA`
-          );
+          movieData[year].push(`Day ${movieData[year].length + 1} - Horror Movie TBA`);
         }
       }
     });
@@ -143,12 +150,11 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
       );
     }
 
-    
     const newCache: SheetCache = {
       data: movieData,
       timestamp: Date.now()
     };
-    
+
     sheetCache = newCache;
     saveCacheToStorage(newCache);
 
@@ -156,13 +162,11 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
   } catch (error) {
     console.error("Error fetching movies from sheet:", error);
 
-    
     if (sheetCache) {
       console.log("Using expired cache due to fetch error");
       return sheetCache.data;
     }
 
-    
     const currentYear = getCurrentYear();
     const fallbackData: MovieData = {};
 
@@ -180,6 +184,7 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
     return fallbackData;
   }
 }
+
 
 function parseCSVLine(line: string): string[] {
   const result: string[] = [];
