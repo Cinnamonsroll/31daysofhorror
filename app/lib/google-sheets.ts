@@ -1,5 +1,3 @@
-import { env } from "process";
-
 export interface MovieData {
   [year: string]: string[];
 }
@@ -90,7 +88,8 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
   }
 
   try {
-    const sheetId = env.NEXT_PUBLIC_SPREADSHEET_ID;
+    const sheetId = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
+    console.log(sheetId)
     const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
 
     const response = await fetch(csvUrl, {
