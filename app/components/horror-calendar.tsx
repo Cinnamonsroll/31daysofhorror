@@ -10,9 +10,8 @@ import {
   MovieData,
   getCurrentYear,
   getDateInfo,
-  getMoviesFromSheet,
-  getDaysUntilOctober,
 } from "../lib/google-sheets";
+import { getMoviesForYear } from "../lib/movie-fetcher";
 
 const LoadingSpinner = ({ message = "Loading..." }: { message?: string }) => (
   <div className="flex flex-col items-center justify-center min-h-[100px] space-y-4">
@@ -210,29 +209,32 @@ export function HorrorCalendar({
   }, []);
 
   useEffect(() => {
-    if (externalMovies && externalYear) {
-      setMovieData((prev) => ({ ...prev, [externalYear]: externalMovies }));
-      setLoading(false);
-      return;
-    }
+  if (externalMovies && externalYear) {
+    setMovieData((prev) => ({ ...prev, [externalYear]: externalMovies }));
+    setLoading(false);
+    return;
+  }
 
-    let isMounted = true;
-    async function fetchMovies() {
-      setLoading(true);
-      try {
-        const data = await getMoviesFromSheet();
-        if (isMounted) setMovieData(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        if (isMounted) setLoading(false);
+  let isMounted = true;
+  async function fetchMovies() {
+    setLoading(true);
+    try {
+      const movies = await getMoviesForYear(currentYear);
+      if (movies && isMounted) {
+        setMovieData((prev) => ({ ...prev, [currentYear]: movies }));
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (isMounted) setLoading(false);
     }
-    fetchMovies();
-    return () => {
-      isMounted = false;
-    };
-  }, [externalMovies, externalYear]);
+  }
+
+  fetchMovies();
+  return () => {
+    isMounted = false;
+  };
+}, [externalMovies, externalYear, currentYear]);
 
   const renderLoadingState = useMemo(() => {
     if (!loading) return null;

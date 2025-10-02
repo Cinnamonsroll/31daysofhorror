@@ -5,6 +5,7 @@ import { useState, useEffect, memo } from "react";
 import { motion } from "framer-motion";
 import { Lock, Play } from "lucide-react";
 import { MovieModal } from "./movie-modal";
+import { MovieInfo } from "../lib/movie-fetcher";
 
 
 const Card = ({

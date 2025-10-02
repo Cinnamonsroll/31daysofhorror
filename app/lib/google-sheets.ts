@@ -1,5 +1,7 @@
+import { MovieInfo } from "./movie-fetcher";
+
 export interface MovieData {
-  [year: string]: string[];
+  [year: string]: string[] ;
 }
 
 export interface DateInfo {
@@ -131,7 +133,7 @@ export async function getMoviesFromSheet(): Promise<MovieData> {
    
         if (year === getCurrentYear()) {
           const first30 = movieData[year].slice(0, 30);
-          const last = movieData[year][30]; // 31st movie
+          const last = movieData[year][30]; 
           movieData[year] = [...shuffleArray(first30), last];
         }
 
