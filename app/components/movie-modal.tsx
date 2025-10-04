@@ -104,9 +104,18 @@ export function MovieModal({ isOpen, onClose, movieTitle}: MovieModalProps) {
             ) : movieData ? (
               <MovieDetailsTemplate movieInfo={movieData} />
             ) : (
-              <div className="flex flex-col items-center justify-center min-h-[300px]">
-                <p className="text-slate-300">No movie information available</p>
-              </div>
+              <MovieDetailsTemplate movieInfo={{
+                title: movieTitle || "Unknown Title",
+                year: "N/A",
+                director: "Pancake",
+                cast: "Pancake, Casey",
+                genre: "N/A",
+                runtime: "N/A",
+                rating: "N/A",
+                poster: "https://discord.mx/rick.png",
+                synopsis: "No details available.",
+                watchLink: "http://djwatch.ashmw.tech/"
+              }} />
             )}
           </motion.div>
         </motion.div>
